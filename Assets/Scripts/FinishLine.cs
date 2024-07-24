@@ -7,11 +7,13 @@ public class FinishLine : MonoBehaviour
 {
 
     [SerializeField] ParticleSystem _finishEffect;
+    private bool _finished;
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !_finished)
         {
+            _finished = true;
             //GameManager.Instance.FinishLevel();
             Debug.Log("Level Finished");
             //get the surface effector and stop it
@@ -25,13 +27,22 @@ public class FinishLine : MonoBehaviour
             AudioSource audioSource = GetComponent<AudioSource>();
             audioSource.Play();
 
+            FindObjectOfType<PlayerController>().DisableControls();
+
             //restart level using invoke after 3 seconds
             Invoke("RestartLevel", 5f);
         }
+    }
+
+    void Awake()
+    {
+        _finished = false;
     }
 
     void RestartLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
 }

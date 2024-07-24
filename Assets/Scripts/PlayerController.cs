@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         _surfaceEffector = FindObjectOfType<SurfaceEffector2D>();
         _surfaceEffector.speed = _surfaceEffectorNormalSpeed;
+
+        enabled = true;
     }
 
     // FixedUpdate is called at a fixed interval and is used for physics calculations
@@ -28,6 +30,12 @@ public class PlayerController : MonoBehaviour
     {
         HandleTorque();
         HandleSpeedAdjustment();
+    }
+
+    //expose public method to stop input when chrash detected
+    public void DisableControls()
+    {
+        enabled = false;
     }
 
     private void HandleTorque()

@@ -8,10 +8,24 @@ public class DustTrail : MonoBehaviour
 
     //audio clips for random snowboarding effects
     [SerializeField] private AudioClip[] _boardSFX;
+    private PlayerController _playerController;
+
+    public bool PlayerEnabled
+    {
+        get
+        {
+            if (_playerController == null)
+            {
+                _playerController = FindObjectOfType<PlayerController>();
+            }
+
+            return _playerController.enabled;
+        }
+    }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") && PlayerEnabled)
         {
             _dustTrail.Play();
             //play a random snowboarding sound effect

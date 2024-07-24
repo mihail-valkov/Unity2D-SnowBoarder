@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,14 +6,23 @@ public class CrashDetector : MonoBehaviour
 {
     [SerializeField] ParticleSystem _crashEffect;
     [SerializeField] private AudioClip _crashSFX;
+    private bool _hasCrashed;
 
+    void Awake()
+    {
+        _hasCrashed = false;
+    }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         Debug.Log("Player Entered Trigger: " + other.tag + " / " + other.name);
-        if (other.CompareTag("Ground"))
+        if (other.CompareTag("Ground") && !_hasCrashed)
         {
+            _hasCrashed = true;
             Debug.Log("Crash Detected");
+
+            //stop player input
+            FindObjectOfType<PlayerController>().DisableControls();
 
             //get the surface effector and stop it
             SurfaceEffector2D surfaceEffector = FindObjectOfType<SurfaceEffector2D>();
